@@ -1,37 +1,4 @@
-## Welcome to GitHub Pages
+## Variability Fault Localization
 
-You can use the [editor on GitHub](https://github.com/ttrangnguyen/VARCOP/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+Software fault localization is one of the most expensive, tedious, and time-consuming activities in program debugging. This activity becomes even much more challenging in SPL systems due to the variability of failures in the systems. These unexpected behaviors are caused by the variability faults which can only be exposed under some combinations of system features. In this article, we present VARCOP, a novel and effective variability fault localization approach. First, to isolate the suspicious code statements, VARCOP analyzes the test results and the failing products' source code to detect the statements related to the feature interactions that potentially make the bugs (in)visible in the products of the systems. Then, it ranks these statements based on their suspiciousness levels which are measured by the test execution information of the products containing them. On a large dataset of buggy SPL systems containing both single variability bug and multiple variability bugs, our empirical evaluation shows that VARCOP significantly improved the state-of-the-art fault localization technique, spectrum-based fault localization, by 47% and 39% in Rank and EXAM, respectively. For localizing single bugs, in +60% cases, VARCOP correctly ranks the buggy statements at the top-3 positions in the resulting lists. In the cases of multiple bugs, VARCOP ranks a haft of the bugs in a buggy system at top-5 positions. Especially, in +50% of the buggy versions, VARCOP effectively localizes at least one buggy statement at top-1 positions of the ranked lists. Moreover, in these lists, one or more bugs in +90% of the cases are correctly ranked at top-3 positions.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/ttrangnguyen/VARCOP/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
