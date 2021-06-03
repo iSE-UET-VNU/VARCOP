@@ -22,6 +22,6 @@ Software fault localization is one of the most expensive, tedious, and time-cons
 1. [Performance In Localizing Multiple Bugs](https://github.com/ttrangnguyen/VARCOP/tree/gh-pages/experiment_results/Analysis/MULTIPLE_BUG)
 1. [Time Complexity](https://github.com/ttrangnguyen/VARCOP/tree/gh-pages/experiment_results/Analysis/RUNTIME)
 
-#### [Dataset](https://tuanngokien.github.io/splc2021/)
-#### [Slicing tool](https://github.com/ttrangnguyen/Static_Slicing)
+#### Dataset [Link](https://tuanngokien.github.io/splc2021/)
+#### Slicing tool [Link](https://github.com/ttrangnguyen/Static_Slicing)
 
