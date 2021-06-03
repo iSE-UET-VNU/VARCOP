@@ -28,7 +28,7 @@ if __name__ == "__main__":
     kwises = ["4wise"]
     coverage_versions = ["", "INoT_1_", "INoT_2_", "INoT_3_", "INoT_4_", "INoT_5_", "INoT_6_", "INoT_7_", "INoT_8_", "INoT_9_", "INoT_10_"]
 
-    base_path = join_path("/Users/thu-trangnguyen/Documents/project/InputPreparation/experiment_results/", "DataV2_NF_0.5")
+    base_path = join_path("/Users/thu-trangnguyen/Documents/project/InputPreparation/experiment_results/", "w=1.5")
     summary_path = join_path(base_path, "NumTests")
     if not os.path.exists(summary_path):
         os.makedirs(summary_path)
