@@ -5,7 +5,8 @@ import xml.etree.ElementTree as ET
 from os.path import isfile
 
 from FileManager import join_path, get_slicing_log_file_path, get_variants_dir, get_variant_dir, \
-    get_test_coverage_dir, SPECTRUM_FAILED_COVERAGE_FILE_NAME, get_file_name, get_slicing_test_case_file_path
+    get_test_coverage_dir, SPECTRUM_FAILED_COVERAGE_FILE_NAME, get_file_name, \
+    get_slicing_test_case_output_file_path
 
 
 def get_suspicious_statement_varcop(mutated_project_dir, postfix):
@@ -32,7 +33,7 @@ def get_suspicious_statement_varcop(mutated_project_dir, postfix):
         return {}
 
 def get_suspicious_statement_tc_based(mutated_project_dir):
-    slicing_info_file_path = get_slicing_test_case_file_path(mutated_project_dir)
+    slicing_info_file_path = get_slicing_test_case_output_file_path(mutated_project_dir)
     failing_coverage_data = read_coverage_file(mutated_project_dir)
     if isfile(slicing_info_file_path):
         slicing_info_file = open(slicing_info_file_path, "r")
