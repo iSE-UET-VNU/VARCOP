@@ -1,4 +1,4 @@
-## Variability Fault Localization
+## A Variability Fault Localization Approach for Software Product Line
 
 Software fault localization is one of the most expensive, tedious, and time-consuming activities in program debugging. This activity becomes even much more challenging in Software Product Line (SPL) systems due to variability of failures. These unexpected behaviors are induced by variability faults which can only be exposed under some combinations of system features. The interaction among these features causes the failures of the system.  Although localizing bugs in non-configurable code has been studied in-depth, variability fault localization in SPL systems still remains mostly unexplored. In this article, we present VarCop, a novel and effective variability fault localization approach. For an SPL system failed by variability bugs, VarCop isolates suspicious code statements by analyzing the overall test results of the sampled products and their source code. The isolated suspicious statements are the statements related to the interaction among the features which are necessary for the visibility of the bugs in the system. In VarCop, the suspiciousness of each isolated statement is assessed based on both the overall test results of the products containing the statement as well as the detailed results of the test cases executed by the statement in these products. On a large public dataset of buggy SPL systems, our empirical evaluation shows that VarCop significantly improves two state-of-the-art fault localization techniques by 33% and 50% in ranking the incorrect statement in the systems containing a single bug each. In about 2/3 of the cases, VarCop correctly ranks the buggy statements at the top-3 positions in the resulting lists. Moreover, for the cases containing multiple bugs, VarCop outperforms the state-of-the-art approaches 2X and 10X in the proportion of bugs localized at the top-1 positions. Especially, in 22% and 65% of the cases, VarCop correctly ranks at least one buggy statement in a system at the top-1 and top-5 positions, respectively. 
 
@@ -22,6 +22,6 @@ Software fault localization is one of the most expensive, tedious, and time-cons
 1. [Performance In Localizing Multiple Bugs](https://github.com/ttrangnguyen/VARCOP/tree/gh-pages/experiment_results/Analysis/MULTIPLE_BUG)
 1. [Time Complexity](https://github.com/ttrangnguyen/VARCOP/tree/gh-pages/experiment_results/Analysis/RUNTIME)
 
-### [Dataset](https://tuanngokien.github.io/splc2021/)
-### [Slicing tool](https://github.com/ttrangnguyen/Static_Slicing)
+#### [Dataset](https://tuanngokien.github.io/splc2021/)
+#### [Slicing tool](https://github.com/ttrangnguyen/Static_Slicing)
 
