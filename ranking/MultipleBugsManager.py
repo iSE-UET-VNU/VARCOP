@@ -7,9 +7,8 @@ from ranking.FeaturesRankingManager import features_ranking_multiple_bugs
 from ranking.Keywords import *
 from ranking.RankingManager import VARCOP_RANK, SBFL_RANK, \
     ranking_multiple_bugs, VARCOP_SPACE, SPACE, get_executed_stms_of_the_system, get_set_of_stms
-from FileManager import join_path, EXPERIMENT_RESULT_FOLDER, get_mutated_projects_dir, list_dir, get_spc_log_file_path, \
-    get_project_sub_dir_by_folder_name
-from ranking.VarBugManager import is_var_bug, is_var_bug_by_config
+from util.FileManager import join_path, EXPERIMENT_RESULT_FOLDER, list_dir, get_spc_log_file_path
+from ranking.VarBugManager import is_var_bug_by_config
 from spc import SPCsManager
 from suspicious_statements_manager import SlicingManager
 from suspicious_statements_manager.SuspiciousStatementManager import get_multiple_buggy_statements, \

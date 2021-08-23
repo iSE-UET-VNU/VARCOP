@@ -1,7 +1,7 @@
 import csv
 import json
 
-import AntManager
+from util import AntManager
 import ConfigManager
 import TestManager
 import VariantComposer

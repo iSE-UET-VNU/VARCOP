@@ -3,7 +3,7 @@ import random
 from collections import defaultdict
 from itertools import combinations, product
 
-from AntManager import check_all_variant_compilable
+from util.AntManager import check_all_variant_compilable
 from FileManager import get_plugin_path, split_path, get_mutation_result_dir, list_dir, join_path, \
     get_mutated_projects_dir, create_symlink, get_feature_source_code_dir, get_file_name_without_ext, copy_dir, \
     is_path_exist, get_model_configs_report_path, get_project_name, unlink, is_symlink

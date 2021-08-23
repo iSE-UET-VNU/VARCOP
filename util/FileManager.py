@@ -8,9 +8,9 @@ from pathlib import Path
 from Helpers import get_logger
 
 _BASE_DIR = pathlib.Path(__file__).parent.absolute()
-PLUGIN_DIR = os.path.join(_BASE_DIR, "plugins")
+PLUGIN_DIR = os.path.join(_BASE_DIR, "../plugins")
 LOG_DIR = os.path.join(_BASE_DIR, "logs")
-PROJECT_DIR = os.path.join(_BASE_DIR, "projects")
+PROJECT_DIR = os.path.join(_BASE_DIR, "../projects")
 
 MODE_FILE_NAME = "model.m"
 FEATURE_ORDER_FILE_NAME = "features.order"
@@ -49,7 +49,7 @@ SPECTRUM_PASSED_COVERAGE_FILE_NAME = "spectrum_passed_coverage.xml"
 FAILED_TEST_COVERAGE_FOLDER_NAME = "failed"
 PASSED_TEST_COVERAGE_FOLDER_NAME = "passed"
 
-EXPERIMENT_RESULT_FOLDER = os.path.abspath("experiment_results")
+EXPERIMENT_RESULT_FOLDER = os.path.abspath("../experiment_results")
 RUNTIME_LOG_FOLDER = os.path.abspath("runtime_logs")
 
 logger = get_logger(__name__)

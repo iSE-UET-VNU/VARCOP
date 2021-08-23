@@ -2,17 +2,11 @@ import os
 
 import pandas
 
-from FileManager import join_path, EXPERIMENT_RESULT_FOLDER
-from xlsxwriter import Workbook
+from util.FileManager import join_path
 
-from experimental_results_analyzer.ExperimentalResultsAnalyzer import write_header_in_sumary_file, SBFL_METRIC_COL, \
-    VARCOP_RANK_COL, VARCOP_EXAM_COL, VARCOP_SPACE_COL, VARCOP_DISABLE_BPC_RANK_COL, \
-    VARCOP_DISABLE_BPC_EXAM_COL, FB_RANK_COL, FB_EXAM_COL, SPACE_COL, SBFL_RANK_COL, SBFL_EXAM_COL, \
-    SPECTRUM_EXPRESSIONS_LIST, NUM_BUGS_COL
+from experimental_results_analyzer.ExperimentalResultsAnalyzer import SPECTRUM_EXPRESSIONS_LIST
 
-from ranking.Keywords import VARCOP_RANK, VARCOP_EXAM, VARCOP_SPACE, VARCOP_DISABLE_BPC_RANK, VARCOP_DISABLE_BPC_EXAM, \
-    SBFL_RANK, SBFL_EXAM, FB_RANK, FB_EXAM, SPACE
-from ranking.Spectrum_Expression import TARANTULA
+from ranking.Keywords import VARCOP_RANK, VARCOP_SPACE
 
 
 def write_all_bugs_to_a_file_for_assumption_evaluation(summary_file_dir, file_lists, num_of_bugs, base_path):

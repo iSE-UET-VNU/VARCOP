@@ -3,14 +3,14 @@ import os
 
 import xml.etree.ElementTree as ET
 
-from FileManager import get_variant_dir, get_test_coverage_dir, join_path, \
+from util.FileManager import get_variant_dir, get_test_coverage_dir, join_path, \
     get_failing_variants, get_spectrum_failed_coverage_file_name_with_version, \
     get_spectrum_passed_coverage_file_name_with_version, list_dir, get_variants_dir
 from ranking.RankingManager import get_set_of_stms
 
 from ranking.Spectrum_Expression import *
 from ranking.Keywords import *
-from TestingCoverageManager import statement_coverage_of_variants
+from util.TestingCoverageManager import statement_coverage_of_variants
 
 
 def features_ranking_multiple_bugs(buggy_statements, mutated_project_dir, search_spaces, filter_coverage_rate, spectrum_expressions,

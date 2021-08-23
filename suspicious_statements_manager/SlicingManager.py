@@ -1,9 +1,9 @@
 import logging
 import time
 
-from FileManager import get_plugin_path, get_file_name_with_parent, get_slicing_log_file_path, get_outer_dir, \
+from util.FileManager import get_plugin_path, get_file_name_with_parent, get_slicing_log_file_path, get_outer_dir, \
     get_spectrum_failed_coverage_file_name_with_version, is_path_exist
-from Helpers import get_logger, execute_shell_command
+from util.Helpers import get_logger, execute_shell_command
 
 logger = get_logger(__name__)
 

@@ -3,10 +3,10 @@ from collections import defaultdict
 
 from bs4 import BeautifulSoup, NavigableString
 
-from FileManager import get_junit_report_path, SOURCE_CODE_EXTENSION, get_test_dir, join_path, \
+from util.FileManager import get_junit_report_path, SOURCE_CODE_EXTENSION, get_test_dir, join_path, \
     get_file_name_without_ext, copy_dir, get_src_dir, get_temp_src_dir, get_outer_dir, \
     TEST_FOLDER_NAME, TEMP_SRC_FOLDER_NAME, get_purified_test_suites_report_path, get_file_name, find_file_by_wildcard
-from Helpers import get_logger
+from util.Helpers import get_logger
 
 logger = get_logger(__name__)
 

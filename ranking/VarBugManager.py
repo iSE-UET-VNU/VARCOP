@@ -1,9 +1,9 @@
 import csv
 import os
 
-from FileManager import get_variants_dir, list_dir, get_variant_dir, get_test_coverage_dir, join_path, \
+from util.FileManager import get_variants_dir, list_dir, get_variant_dir, get_test_coverage_dir, join_path, \
     get_spectrum_failed_coverage_file_name_with_version, get_model_configs_report_path
-from TestingCoverageManager import statement_coverage
+from util.TestingCoverageManager import statement_coverage
 
 
 def is_var_bug(mutated_project_dir, filter_coverage, spectrum_coverage_prefix=""):

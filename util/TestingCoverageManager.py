@@ -3,7 +3,7 @@ import os
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 
-from FileManager import get_test_coverage_dir, join_path, SPECTRUM_PASSED_COVERAGE_FILE_NAME, get_variants_dir, \
+from util.FileManager import get_test_coverage_dir, join_path, SPECTRUM_PASSED_COVERAGE_FILE_NAME, get_variants_dir, \
     list_dir, get_all_coverage_file_paths_in_dir, FAILED_TEST_COVERAGE_FOLDER_NAME, PASSED_TEST_COVERAGE_FOLDER_NAME
 from Helpers import get_logger
 

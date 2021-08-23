@@ -6,7 +6,7 @@ from FileManager import get_model_configs_dir, get_file_name_without_ext, join_p
     get_model_configs_report_path, \
     copy_file
 from Helpers import get_logger
-import ModelManager
+from util import ModelManager
 
 logger = get_logger(__name__)
 

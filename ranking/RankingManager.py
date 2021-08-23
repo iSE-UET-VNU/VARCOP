@@ -2,20 +2,19 @@ import logging
 import os
 import time
 import xml.etree.ElementTree as ET
-from statistics import median, mode, stdev, mean
+from statistics import median, stdev
 from scipy import stats
 from scipy.stats.mstats import gmean
 import numpy
 
-from FileManager import join_path, \
-    get_test_coverage_dir, PASSED_TEST_COVERAGE_FOLDER_NAME, FAILED_TEST_COVERAGE_FOLDER_NAME, get_variant_dir, \
-    get_variants_dir, get_all_variant_dirs, list_dir, get_failing_variants, \
-    get_spectrum_failed_coverage_file_name_with_version, get_spectrum_passed_coverage_file_name_with_version
+from util.FileManager import join_path, \
+    get_test_coverage_dir, get_variant_dir, \
+    get_variants_dir, get_all_variant_dirs, list_dir, get_spectrum_failed_coverage_file_name_with_version, get_spectrum_passed_coverage_file_name_with_version
 
 from ranking.Keywords import *
 # keywords
 from ranking.Spectrum_Expression import *
-from TestingCoverageManager import statement_coverage
+from util.TestingCoverageManager import statement_coverage
 from ranking.VariantLevelRankingManager import calculate_suspiciousness_variant_level, get_num_passing_failing_variants, \
     VARIANT_LEVEL_SUSPICIOUSNESS_SCORE
 

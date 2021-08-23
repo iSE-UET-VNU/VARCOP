@@ -1,6 +1,6 @@
 import re
 
-from FileManager import get_plugin_path, get_variant_dir, get_feature_source_code_dir, move_file, \
+from util.FileManager import get_plugin_path, get_variant_dir, get_feature_source_code_dir, move_file, \
     get_file_name_without_ext, join_path, is_path_exist, get_src_dir, get_file_name, get_variants_dir
 from Helpers import get_logger, execute_shell_command
 

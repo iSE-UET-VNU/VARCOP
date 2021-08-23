@@ -4,7 +4,7 @@ import os
 import xml.etree.ElementTree as ET
 from os.path import isfile
 
-from FileManager import join_path, get_slicing_log_file_path, get_variants_dir, get_variant_dir, \
+from util.FileManager import join_path, get_slicing_log_file_path, get_variants_dir, get_variant_dir, \
     get_test_coverage_dir, SPECTRUM_FAILED_COVERAGE_FILE_NAME, get_file_name, \
     get_slicing_test_case_output_file_path
 

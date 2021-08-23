@@ -2,11 +2,7 @@ import os
 
 from experimental_results_analyzer.ExperimentalResultsAnalyzer import summary_result, summary_hitx, \
     write_all_bugs_to_a_file, summary_percentage_of_cases_found_bugs, summary_pbl
-from FileManager import join_path, EXPERIMENT_RESULT_FOLDER
-from experimental_results_analyzer.ForAssumptionEvalutation_ExperimentalResultAnalyzer import \
-    write_all_bugs_to_a_file_for_assumption_evaluation
-
-from xlsxwriter import Workbook
+from util.FileManager import join_path
 
 from experimental_results_analyzer.ImprovementComparisonAnalyzer import write_comparison_data_to_file
 

@@ -1,7 +1,7 @@
 import random
 
-import TestingCoverageManager
-from FileManager import get_plugin_path, get_file_name_with_parent, get_test_coverage_dir, join_path, \
+from util import TestingCoverageManager
+from util.FileManager import get_plugin_path, get_file_name_with_parent, get_test_coverage_dir, join_path, \
     FAILED_TEST_COVERAGE_FOLDER_NAME, PASSED_TEST_COVERAGE_FOLDER_NAME, \
     is_path_exist, get_all_variant_dirs, get_passed_spectrum_coverage_file_path_with_version, \
     get_failed_spectrum_coverage_file_path_with_version, get_failed_test_coverage_dir, get_passed_test_coverage_dir

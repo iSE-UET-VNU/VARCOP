@@ -1,11 +1,11 @@
 import csv
 import re
 
-from FileManager import get_plugin_path, get_file_name_without_ext, get_test_dir, create_symlink, \
+from util.FileManager import get_plugin_path, get_file_name_without_ext, get_test_dir, create_symlink, \
     get_compiled_source_classes_dir, \
     get_compiled_test_classes_dir, get_file_name, get_src_dir, get_test_coverage_dir, get_variant_dir, is_path_exist, \
     join_path, get_model_configs_report_path, delete_dir, get_variants_dir, list_dir, get_dependency_lib_dirs, \
-    touch_file, FAILED_TEST_COVERAGE_FOLDER_NAME, PASSED_TEST_COVERAGE_FOLDER_NAME, copy_file, move_file
+    touch_file, FAILED_TEST_COVERAGE_FOLDER_NAME, PASSED_TEST_COVERAGE_FOLDER_NAME, move_file
 from Helpers import get_logger, execute_shell_command, hash_md5
 
 logger = get_logger(__name__)

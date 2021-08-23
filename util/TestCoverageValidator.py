@@ -1,13 +1,13 @@
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 
-import TestManager
-from FileManager import get_all_variant_dirs, get_test_dir, \
+from util import TestManager
+from util.FileManager import get_all_variant_dirs, get_test_dir, \
     get_all_coverage_file_paths_in_dir, get_test_coverage_dir, get_file_name, TEST_COVERAGE_FILE_EXTENSION, \
     get_failed_test_coverage_dir, get_failed_spectrum_coverage_file_path_with_version, \
     get_passed_spectrum_coverage_file_path_with_version, get_passed_test_coverage_dir
 from Helpers import execute_shell_command, get_logger
-from TestManager import check_variant_final_test_output
+from util.TestManager import check_variant_final_test_output
 from suspicious_statements_manager import SuspiciousStatementManager
 
 logger = get_logger(__name__)

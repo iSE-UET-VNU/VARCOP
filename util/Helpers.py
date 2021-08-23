@@ -49,7 +49,7 @@ def find_plugin_name(command):
 
 
 def execute_shell_command(command, extra_args=None, log_to_file=False, show_command=True):
-    from FileManager import get_log_file_path, remove_file
+    from util.FileManager import get_log_file_path, remove_file
     if extra_args:
         for args in extra_args:
             assert isinstance(args, dict), """Input Argument must be passed as dict={"name":"value"}"""

@@ -2,7 +2,7 @@ import logging
 import os
 import xml.etree.ElementTree as ET
 
-from FileManager import get_all_variant_dirs, get_test_coverage_dir, \
+from util.FileManager import get_all_variant_dirs, get_test_coverage_dir, \
     get_spectrum_failed_coverage_file_name_with_version, get_spectrum_passed_coverage_file_name_with_version, join_path
 from ranking.Keywords import VARIANT_NUM_OF_PASSES, VARIANT_NUM_OF_FAILS
 

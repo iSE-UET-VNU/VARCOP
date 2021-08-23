@@ -1,6 +1,6 @@
 import re
 
-from FileManager import get_plugin_path, get_file_name_without_ext
+from util.FileManager import get_plugin_path, get_file_name_without_ext
 from Helpers import get_logger, execute_shell_command
 
 logger = get_logger(__name__)
