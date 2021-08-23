@@ -10,7 +10,6 @@ from util.FileManager import join_path, get_slicing_log_file_path, get_variants_
 
 
 def get_suspicious_statement_varcop(mutated_project_dir, postfix):
-
     slicing_info_file_path = get_slicing_log_file_path(mutated_project_dir, postfix)
     failing_coverage_data = read_coverage_file(mutated_project_dir)
     if isfile(slicing_info_file_path):
@@ -31,6 +30,7 @@ def get_suspicious_statement_varcop(mutated_project_dir, postfix):
         return suspicious_stms_list
     else:
         return {}
+
 
 def get_suspicious_statement_tc_based(mutated_project_dir):
     slicing_info_file_path = get_slicing_test_case_output_file_path(mutated_project_dir)
@@ -57,6 +57,7 @@ def get_suspicious_statement_tc_based(mutated_project_dir):
         return tc_sliced_based_stms
     else:
         return {}
+
 
 def read_coverage_file(mutated_project_dir):
     variants_dir = get_variants_dir(mutated_project_dir)

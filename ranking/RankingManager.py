@@ -223,24 +223,6 @@ def ranking_multiple_bugs(buggy_statements, mutated_project_dir, search_spaces, 
     return all_buggy_positions, varcop_ranking_time
 
 
-# def sbfl_only_ranking_multiple_bugs(buggy_statements, mutated_project_dir, spectrum_expression,
-#                                     spectrum_coverage_prefix="", coverage_rate=0.0):
-#     global buggy
-#     buggy = buggy_statements
-#     global system
-#     system = ""
-#     all_buggy_position = {}
-#     space = {}
-#     # traditional SBFL
-#     ranked_list_traditional_spectrum = sbfl_ranking(mutated_project_dir, spectrum_expression,
-#                                                     spectrum_coverage_prefix, coverage_rate)
-#
-#     all_buggy_position[SBFL_RANK] = locate_multiple_bugs(buggy_statements,
-#                                                                  ranked_list_traditional_spectrum)
-#     space[SBFL_RANK] = len(ranked_list_traditional_spectrum)
-#     return all_buggy_position, space
-
-
 def locate_multiple_bugs(buggy_statements, isolated_set, isolated_ranked_list,
                          full_ranked_list):
     bugs = {}
@@ -258,20 +240,6 @@ def locate_multiple_bugs(buggy_statements, isolated_set, isolated_ranked_list,
             bugs[stm][EXAM] = bugs[stm][RANK] / len(isolated_ranked_list)
     return bugs
 
-
-# def locate_multiple_bugs_by_sbfl(buggy_statements, ranked_list, full_ranked_list):
-#     buggy_positions = {}
-#     stms_in_ranked_list = get_set_of_stms(ranked_list)
-#     print(stms_in_ranked_list)
-#     for stm in buggy_statements:
-#         rank = search_rank_worst_case(stm, ranked_list)
-#         if rank == STM_NOT_FOUND:
-#             temp = search_rank_worst_case(stm, full_ranked_list)
-#             rank = len(ranked_list) + temp
-#             for stm in stms_in_ranked_list:
-#                 rank -= 1
-#         buggy_positions[stm] = rank
-#     return buggy_positions
 
 
 def get_local_score(stm, ranked_list):

@@ -1,6 +1,5 @@
 import math
 
-
 TARANTULA = "Tarantula"
 OCHIAI = "Ochiai"
 OP2 = "Op2"
@@ -35,7 +34,6 @@ GOODMAN = "Goodman"
 HARMONIC_MEAN = "Harmonic_mean"
 KULCZYNSKI1 = "Kulczynski1"
 KULCZYNSKI2 = "Kulczynski2"
-
 
 TARANTULA_SCORE = "Tarantula_score"
 TARANTULA_AVERAGE = "Tarantula_average"
@@ -72,7 +70,6 @@ WONG1_AVERAGE = "Wong1_average"
 SOKAL_SCORE = "Sokal_score"
 SOKAL_AVERAGE = "Sokal_average"
 
-#new
 SORENSEN_DICE_SCORE = "Sorensen_dice_score"
 DICE_SCORE = "Dice_score"
 HUMANN_SCORE = "Humman_score"
@@ -126,7 +123,7 @@ def ochiai_calculation(fails, passes, total_failed_tests, total_passed_tests):
     if fails == 0:
         return 0
     return fails / math.sqrt(total_failed_tests * (
-                fails + passes))
+            fails + passes))
 
 
 def op2_calculation(fails, passes, total_failed_tests, total_passed_tests):
@@ -145,43 +142,30 @@ def dstar_calculation(fails, passes, total_failed_tests, total_passed_tests):
         return 0
     elif temp == 0:
         return 1000
-    results = (fails * fails) / temp
     return (fails * fails) / temp
 
-def dstar_modified_calculation(fails, passes, total_failed_tests, total_passed_tests):
-    temp =  passes + (total_failed_tests - fails)
-    if fails == 0:
-        return 0
-    elif temp == 0:
-        return 1000
-    return ((fails * fails) / (total_failed_tests * total_failed_tests))/temp
 
 def russell_rao_calculation(fails, passes, total_failed_tests, total_passes_tests):
     if total_failed_tests + total_passes_tests == 0:
         return 0
     else:
-        return fails/(total_failed_tests + total_passes_tests)
+        return fails / (total_failed_tests + total_passes_tests)
+
 
 def simple_matching_calculation(fails, passes, total_failed_tests, total_passes_tests):
     if total_passes_tests + total_failed_tests == 0:
         return 0
     else:
-        return (fails + total_passes_tests - passes)/(total_failed_tests + total_passes_tests)
+        return (fails + total_passes_tests - passes) / (total_failed_tests + total_passes_tests)
+
 
 def rogers_tanimoto_calculation(fails, passes, total_failed_tests, total_passes_tests):
-    temp = fails + (total_passes_tests - passes) + 2*(total_failed_tests - fails + passes)
+    temp = fails + (total_passes_tests - passes) + 2 * (total_failed_tests - fails + passes)
     if temp == 0:
         return 0
     else:
-        return (fails + (total_passes_tests - passes))/ temp
+        return (fails + (total_passes_tests - passes)) / temp
 
-# def ample_calculation(fails, passes, total_failed_tests, total_passes_tests):
-#     if total_failed_tests == 0:
-#         return 0
-#     elif total_passes_tests == 0:
-#         return 1
-#     else:
-#         return abs(fails/total_failed_tests - passes/total_passes_tests)
 
 def ample2_calculation(fails, passes, total_failed_tests, total_passes_tests):
     if total_failed_tests == 0:
@@ -189,69 +173,81 @@ def ample2_calculation(fails, passes, total_failed_tests, total_passes_tests):
     elif total_passes_tests == 0:
         return 1
     else:
-        return (fails/total_failed_tests - passes/total_passes_tests)
+        return fails / total_failed_tests - passes / total_passes_tests
+
 
 def jaccard_calculation(fails, passes, total_failed_tests, total_passes_tests):
-    if(total_failed_tests + passes) == 0:
+    if (total_failed_tests + passes) == 0:
         return 0
     else:
-        return fails/(total_failed_tests + passes)
+        return fails / (total_failed_tests + passes)
+
 
 def cohen_calculation(fails, passes, total_failed_tests, total_passed_tests):
-    temp = (fails + passes)*(total_passed_tests) + total_failed_tests*(total_failed_tests-fails+total_passed_tests-passes)
+    temp = (fails + passes) * (total_passed_tests) + total_failed_tests * (
+                total_failed_tests - fails + total_passed_tests - passes)
     if temp == 0:
         return 0
     else:
-        return (2*fails*(total_passed_tests-passes) - 2*(total_failed_tests - fails)*passes)/temp
+        return (2 * fails * (total_passed_tests - passes) - 2 * (total_failed_tests - fails) * passes) / temp
 
 
 def scott_calculation(fails, passes, total_failed_tests, total_passes_tests):
-    temp = (2*fails + total_failed_tests - fails + passes) * (2*(total_passes_tests - passes) + total_failed_tests - fails + passes)
+    temp = (2 * fails + total_failed_tests - fails + passes) * (
+                2 * (total_passes_tests - passes) + total_failed_tests - fails + passes)
     if temp == 0:
         return 0
     else:
-        return (4*fails*(total_passes_tests-passes) - 4*(total_failed_tests-fails)*passes - (total_failed_tests - fails - passes)* (total_failed_tests - fails - passes))/temp
+        return (4 * fails * (total_passes_tests - passes) - 4 * (total_failed_tests - fails) * passes - (
+                    total_failed_tests - fails - passes) * (total_failed_tests - fails - passes)) / temp
+
 
 def rogot1_calculation(fails, passes, total_failed_tests, total_passes_tests):
-    temp1 = 2*fails + total_failed_tests - fails + passes
-    temp2 = 2*(total_passes_tests-passes) + total_failed_tests - fails + passes
+    temp1 = 2 * fails + total_failed_tests - fails + passes
+    temp2 = 2 * (total_passes_tests - passes) + total_failed_tests - fails + passes
 
     if temp1 == 0 or temp2 == 0:
         return 0
     else:
-        return (fails/temp1 + (total_passes_tests-passes)/temp2)/2
+        return (fails / temp1 + (total_passes_tests - passes) / temp2) / 2
+
 
 def geometric_mean_calculation(fails, passes, total_failed_tests, total_passes_tests):
-    temp = (fails+passes)*(total_failed_tests-fails + total_passes_tests - passes)*total_failed_tests*total_passes_tests
+    temp = (fails + passes) * (
+                total_failed_tests - fails + total_passes_tests - passes) * total_failed_tests * total_passes_tests
     if temp <= 0:
         return 0
     else:
-        return (fails*(total_passes_tests-passes) - (total_failed_tests-fails)*passes) / math.sqrt(temp)
+        return (fails * (total_passes_tests - passes) - (total_failed_tests - fails) * passes) / math.sqrt(temp)
+
 
 def m2_calculation(fails, passes, total_failed_tests, total_passes_tests):
-    temp = fails + (total_passes_tests - passes) + 2*(total_failed_tests - fails + passes)
+    temp = fails + (total_passes_tests - passes) + 2 * (total_failed_tests - fails + passes)
     if temp == 0:
         return 0
     else:
-        return fails/temp
+        return fails / temp
 
-def  wong1_calculation(fails, passes, total_failed_tests, total_passes_tests):
+
+def wong1_calculation(fails, passes, total_failed_tests, total_passes_tests):
     return fails
 
-def sokal_calculation(fails, passes, total_failed_tests, total_passes_tests):
-    temp = 2*(fails + total_passes_tests - passes) + (total_failed_tests - fails) + passes
-    if temp == 0:
-        return 0
-    else:
-        return 2*(fails + total_passes_tests - passes)/temp
 
-#new
-def sorensen_dice_calculation(fails, passes, total_failed_tests, total_passes_tests):
-    temp = 2*fails + (total_failed_tests-fails) + passes
+def sokal_calculation(fails, passes, total_failed_tests, total_passes_tests):
+    temp = 2 * (fails + total_passes_tests - passes) + (total_failed_tests - fails) + passes
     if temp == 0:
         return 0
     else:
-        return (2*fails)/temp
+        return 2 * (fails + total_passes_tests - passes) / temp
+
+
+def sorensen_dice_calculation(fails, passes, total_failed_tests, total_passes_tests):
+    temp = 2 * fails + (total_failed_tests - fails) + passes
+    if temp == 0:
+        return 0
+    else:
+        return (2 * fails) / temp
+
 
 def dice_calculation(fails, passes, total_failed_tests, total_passes_tests):
     temp = fails + (total_failed_tests - fails) + passes
@@ -260,48 +256,55 @@ def dice_calculation(fails, passes, total_failed_tests, total_passes_tests):
     else:
         return (2 * fails) / temp
 
+
 def humman_calculation(fails, passes, total_failed_tests, total_passes_tests):
     temp = total_failed_tests + total_passes_tests
     if temp == 0:
         return 0
     else:
-        return (fails + (total_passes_tests - passes) - (total_failed_tests - fails) - passes)/temp
+        return (fails + (total_passes_tests - passes) - (total_failed_tests - fails) - passes) / temp
+
 
 def m1_calculation(fails, passes, total_failed_tests, total_passes_tests):
     temp = (total_failed_tests - fails) + passes
     if temp == 0:
         return 0
     else:
-        return (fails + (total_passes_tests - passes))/temp
+        return (fails + (total_passes_tests - passes)) / temp
+
 
 def wong2_calculation(fails, passes, total_failed_tests, total_passes_tests):
     return fails - passes
 
+
 def wong3_calculation(fails, passes, total_failed_tests, total_passes_tests):
     if total_failed_tests + total_failed_tests == 0:
-        return  -1000
+        return -1000
     if passes <= 2:
         return fails - passes
     elif 2 < passes and passes <= 10:
-        return fails - (2 + 0.1*(passes - 2))
+        return fails - (2 + 0.1 * (passes - 2))
     else:
-        return fails - (2.8 + 0.001*(passes - 10))
+        return fails - (2.8 + 0.001 * (passes - 10))
+
 
 def zoltar_calculation(fails, passes, total_failed_tests, total_passes_tests):
     if fails == 0:
         return 0
-    temp = total_failed_tests + passes + (10000*passes*(total_failed_tests-fails))/fails
+    temp = total_failed_tests + passes + (10000 * passes * (total_failed_tests - fails)) / fails
     if temp == 0:
         return 0
     else:
-        return fails/temp
+        return fails / temp
+
 
 def overlap_calculation(fails, passes, total_failed_tests, total_passes_tests):
     temp = min(fails, total_failed_tests - fails, passes)
     if temp == 0:
         return 0
     else:
-        return fails/temp
+        return fails / temp
+
 
 def euclid_calculation(fails, passes, total_failed_tests, total_passes_tests):
     temp = fails + (total_passes_tests - passes)
@@ -309,6 +312,7 @@ def euclid_calculation(fails, passes, total_failed_tests, total_passes_tests):
         return 0
     else:
         return math.sqrt(temp)
+
 
 def rogot2_calculation(fails, passes, total_failed_tests, total_passes_tests):
     temp1 = fails + passes
@@ -319,50 +323,62 @@ def rogot2_calculation(fails, passes, total_failed_tests, total_passes_tests):
     if temp1 == 0 or temp2 == 0:
         return 0
     if temp3 == 0 or temp4 == 0:
-        return (1/4)*((fails/temp1) + (fails/temp2))
+        return (1 / 4) * ((fails / temp1) + (fails / temp2))
     else:
-        return (1/4)*((fails/temp1) + (fails/temp2)+((total_passes_tests-passes)/temp3) + ((total_passes_tests-passes)/temp4))
+        return (1 / 4) * ((fails / temp1) + (fails / temp2) + ((total_passes_tests - passes) / temp3) + (
+                    (total_passes_tests - passes) / temp4))
+
 
 def hamming_calculation(fails, passes, total_failed_tests, total_passes_tests):
     return fails + (total_passes_tests - passes)
 
+
 def fleiss_calculation(fails, passes, total_failed_tests, total_passes_tests):
-    temp = (2*fails + (total_failed_tests - fails) + passes) + (2*(total_passes_tests-passes)+(total_failed_tests-fails)+passes)
+    temp = (2 * fails + (total_failed_tests - fails) + passes) + (
+                2 * (total_passes_tests - passes) + (total_failed_tests - fails) + passes)
     if temp == 0:
         return 0
     else:
-        temp2 = 4*fails*(total_passes_tests-passes) - 4*(total_failed_tests-fails)*passes - (total_failed_tests-fails - passes)*(total_failed_tests-fails - passes)
-        return temp2/temp
+        temp2 = 4 * fails * (total_passes_tests - passes) - 4 * (total_failed_tests - fails) * passes - (
+                    total_failed_tests - fails - passes) * (total_failed_tests - fails - passes)
+        return temp2 / temp
+
 
 def anderberg_calculation(fails, passes, total_failed_tests, total_passes_tests):
-    temp = fails + 2*(total_failed_tests - fails + passes)
+    temp = fails + 2 * (total_failed_tests - fails + passes)
     if temp == 0:
         return 0
     else:
-        return fails/temp
+        return fails / temp
+
 
 def goodman_calculation(fails, passes, total_failed_tests, total_passes_tests):
-    temp = 2*fails + (total_failed_tests - fails) + passes
+    temp = 2 * fails + (total_failed_tests - fails) + passes
     if temp == 0:
         return 0
     else:
-        return (2*fails - (total_failed_tests - fails) - passes)/temp
+        return (2 * fails - (total_failed_tests - fails) - passes) / temp
+
 
 def harmonic_mean_calculation(fails, passes, total_failed_tests, total_passes_tests):
-    temp = (fails + passes)*(total_passes_tests - passes + total_failed_tests - fails)*total_failed_tests*total_passes_tests
+    temp = (fails + passes) * (
+                total_passes_tests - passes + total_failed_tests - fails) * total_failed_tests * total_passes_tests
     if temp == 0:
         return 0
     else:
-        temp2 = fails*(total_passes_tests-passes) - (total_failed_tests-fails)*passes
-        temp3 = (fails+passes)*(total_passes_tests-passes+total_failed_tests-fails) + total_failed_tests*total_passes_tests
-        return (temp2*temp3)/temp
+        temp2 = fails * (total_passes_tests - passes) - (total_failed_tests - fails) * passes
+        temp3 = (fails + passes) * (
+                    total_passes_tests - passes + total_failed_tests - fails) + total_failed_tests * total_passes_tests
+        return (temp2 * temp3) / temp
+
 
 def kulczynski1_calculation(fails, passes, total_failed_tests, total_passes_tests):
     temp = (total_failed_tests - fails) + passes
     if temp == 0:
         return 0
     else:
-        return fails/temp
+        return fails / temp
+
 
 def kulczynski2_calculation(fails, passes, total_failed_tests, total_passes_tests):
     temp1 = total_failed_tests
@@ -370,10 +386,4 @@ def kulczynski2_calculation(fails, passes, total_failed_tests, total_passes_test
     if temp1 == 0 or temp2 == 0:
         return 0
     else:
-        return (1/2)*(fails/temp1 + fails/temp2)
-
-
-
-
-
-
+        return (1 / 2) * (fails / temp1 + fails / temp2)
