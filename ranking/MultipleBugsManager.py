@@ -33,7 +33,7 @@ SBFL_EXAM_COL = 15
 FB_RANK_COL = 16
 FB_EXAM_COL = 17
 SPACE_COL = 18
-
+IS_VAR_BUG_COL = 19
 
 def write_header_in_result_file(row, sheet):
     sheet.write(row, BUG_ID_COL, BUG_ID)
@@ -64,6 +64,7 @@ def write_header_in_result_file(row, sheet):
     sheet.write(row, FB_EXAM_COL, FB_EXAM)
 
     sheet.write(row, SPACE_COL, SPACE)
+    sheet.write(row, IS_VAR_BUG_COL, "IS_VAR_BUG")
 
 
 def write_result_to_file(row, sheet, ranking_results, fb_results, search_spaces, is_var_bug):
@@ -81,6 +82,7 @@ def write_result_to_file(row, sheet, ranking_results, fb_results, search_spaces,
         else:
             sheet.write(row, VARCOP_RANK_COL, ranking_results[VARCOP_DISABLE_BPC_RANK][stm][RANK])
             sheet.write(row, VARCOP_EXAM_COL, (ranking_results[VARCOP_DISABLE_BPC_RANK][stm][RANK] / all_stms) * 100)
+            sheet.write(row, IS_VAR_BUG_COL, 0)
 
         sheet.write(row, VARCOP_SPACE_COL, varcop_space)
 
@@ -129,13 +131,13 @@ def get_suspicious_space(mutated_project_dir, filtering_coverage_rate, coverage_
     return search_spaces
 
 
-def multiple_bugs_ranking(system_name, num_bug_setting, bug_folder_dir, kwise, sbfl_metrics, alpha=0.5,
+def multiple_bugs_ranking(system_name, buggy_systems_folder, sbfl_metrics, alpha=0.5,
                           normalization=NORMALIZATION_ENABLE,
                           aggregation=AGGREGATION_ARITHMETIC_MEAN,
-                          filtering_coverage_rate=0.0, coverage_version=""):
-    mutated_projects_dir = join_path(bug_folder_dir, kwise)
-    if os.path.exists(mutated_projects_dir):
-        mutated_projects = list_dir(mutated_projects_dir)
+                          filtering_coverage_rate=0.1, coverage_version=""):
+
+    if os.path.exists(buggy_systems_folder):
+        mutated_projects = list_dir(buggy_systems_folder)
 
         result_folder_dir = join_path(EXPERIMENT_RESULT_FOLDER, "w=" + str(alpha))
         if not os.path.exists(result_folder_dir):
@@ -153,13 +155,10 @@ def multiple_bugs_ranking(system_name, num_bug_setting, bug_folder_dir, kwise, s
         if not os.path.exists(aggregation_result_dir):
             os.makedirs(aggregation_result_dir)
 
-        kwise_result_dir = join_path(aggregation_result_dir, kwise)
-        if not os.path.exists(kwise_result_dir):
-            os.makedirs(kwise_result_dir)
         sheet = []
         row = 0
-        experiment_file_name = join_path(kwise_result_dir,
-                                         num_bug_setting + coverage_version + ".xlsx")
+        experiment_file_name = join_path(aggregation_result_dir,
+                                        system_name + "_ranking_result.xlsx")
 
         wb = Workbook(experiment_file_name)
 
@@ -171,9 +170,9 @@ def multiple_bugs_ranking(system_name, num_bug_setting, bug_folder_dir, kwise, s
 
         for mutated_project_name in mutated_projects:
             num_of_bugs += 1
-            mutated_project_dir = join_path(mutated_projects_dir, mutated_project_name)
+            mutated_project_dir = join_path(buggy_systems_folder, mutated_project_name)
 
-            # suspicious_isolation(mutated_project_dir, filtering_coverage_rate, coverage_version)
+            suspicious_isolation(mutated_project_dir, filtering_coverage_rate, coverage_version)
             search_spaces = get_suspicious_space(mutated_project_dir, filtering_coverage_rate, coverage_version)
             buggy_statements = get_multiple_buggy_statements(mutated_project_name, mutated_project_dir)
 

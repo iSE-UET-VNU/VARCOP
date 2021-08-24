@@ -9,12 +9,8 @@ from ranking.Spectrum_Expression import JACCARD, SORENSEN_DICE, TARANTULA, OCHIA
 
 if __name__ == "__main__":
     # parameter configuration
-    data_base_dir = "/Users/thu-trangnguyen/Documents/Research/SPL/"
-    system_name = "Debug"
-    num_bug_setting = "1Bug"
-    w = 0.2
-    kwise = "4wise"
-    coverage_versions = [""]
+    system_name = "Email"
+    buggy_systems_folder = "/Users/thu-trangnguyen/Documents/Research/SPL/Email/1Bug/4wise/"
     sbfl_metrics = [TARANTULA, OCHIAI, OP2, BARINEL, DSTAR,
                     RUSSELL_RAO, SIMPLE_MATCHING, ROGERS_TANIMOTO, AMPLE, JACCARD,
                     COHEN, SCOTT, ROGOT1, GEOMETRIC_MEAN, M2,
@@ -24,9 +20,8 @@ if __name__ == "__main__":
                     GOODMAN, HARMONIC_MEAN, KULCZYNSKI2]
     normalization = NORMALIZATION_ENABLE
     aggregation = AGGREGATION_ARITHMETIC_MEAN
+    w = 0.5
     # -----------------------
-    system_dir = join_path(data_base_dir, system_name)
-    bug_folder_dir = join_path(system_dir, num_bug_setting)
-    multiple_bugs_ranking(system_name=system_name, num_bug_setting=num_bug_setting,
-                          bug_folder_dir=bug_folder_dir, kwise=kwise, sbfl_metrics=sbfl_metrics,
+
+    multiple_bugs_ranking(system_name=system_name, buggy_systems_folder= buggy_systems_folder, sbfl_metrics=sbfl_metrics,
                           alpha=w, normalization=normalization, aggregation=aggregation)
