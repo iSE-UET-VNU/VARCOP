@@ -58,7 +58,7 @@ def features_ranking_multiple_bugs(buggy_statements, mutated_project_dir, search
                 feature_rank, stm_rank = search_rank_worst_case(stm, features_info[SS_STMS_IN_F_PRODUCTS], features_info[SS_SLICING], spectrum_expression)
                 feature_based_rank[spectrum_expression][FB_TC_RANK][stm] = {}
                 feature_based_rank[spectrum_expression][FB_TC_RANK][stm][RANK] = stm_rank
-                feature_based_rank[spectrum_expression][FB_TC_RANK][stm][EXAM] = (stm_rank/len(statements_sets[SS_SLICING])) * 100
+                feature_based_rank[spectrum_expression][FB_TC_RANK][stm][EXAM] = (stm_rank / len(statements_sets[SS_SLICING])) * 100
             else:
                 feature_based_rank[spectrum_expression][FB_TC_RANK] = feature_based_rank[spectrum_expression][FB_RANK]
 

@@ -33,7 +33,6 @@ SBFL_EXAM_COL = 15
 FB_RANK_COL = 16
 FB_EXAM_COL = 17
 SPACE_COL = 18
-IS_VAR_BUG_COL = 19
 
 
 def write_header_in_result_file(row, sheet):
@@ -66,7 +65,6 @@ def write_header_in_result_file(row, sheet):
 
     sheet.write(row, SPACE_COL, SPACE)
 
-    sheet.write(row, IS_VAR_BUG_COL, "IS_VAR_BUG")
 
 
 def write_result_to_file(row, sheet, ranking_results, fb_results, search_spaces, is_var_bug):
@@ -84,7 +82,7 @@ def write_result_to_file(row, sheet, ranking_results, fb_results, search_spaces,
         else:
             sheet.write(row, VARCOP_RANK_COL, ranking_results[VARCOP_DISABLE_BPC_RANK][stm][RANK])
             sheet.write(row, VARCOP_EXAM_COL, (ranking_results[VARCOP_DISABLE_BPC_RANK][stm][RANK] / all_stms) * 100)
-            sheet.write(row, IS_VAR_BUG_COL, 0)
+
 
         sheet.write(row, VARCOP_SPACE_COL, varcop_space)
 
@@ -133,17 +131,16 @@ def get_suspicious_space(mutated_project_dir, filtering_coverage_rate, coverage_
     return search_spaces
 
 
-def multiple_bugs_ranking(result_folder, system_name, bug_folder, system_dir, kwise, spectrum_expressions,
+def multiple_bugs_ranking(system_name, bug_folder, system_dir, kwise, sbfl_metrics,
                           filtering_coverage_rate, coverage_version, alpha):
     aggregations = [RankingManager.AGGREGATION_ARITHMETIC_MEAN]
     normalizations = [RankingManager.NORMALIZATION_ALPHA_BETA]
 
     mutated_projects_dir = join_path(system_dir, kwise)
-    print(mutated_projects_dir)
     if os.path.exists(mutated_projects_dir):
         mutated_projects = list_dir(mutated_projects_dir)
 
-        result_folder_dir = join_path(EXPERIMENT_RESULT_FOLDER, result_folder)
+        result_folder_dir = join_path(EXPERIMENT_RESULT_FOLDER, "w=" + str(alpha))
         if not os.path.exists(result_folder_dir):
             os.makedirs(result_folder_dir)
 
@@ -164,18 +161,15 @@ def multiple_bugs_ranking(result_folder, system_name, bug_folder, system_dir, kw
                 kwise_result_dir = join_path(aggregation_result_dir, kwise)
                 if not os.path.exists(kwise_result_dir):
                     os.makedirs(kwise_result_dir)
-
                 sheet = []
-
                 row = 0
-
                 experiment_file_name = join_path(kwise_result_dir,
                                                  bug_folder + coverage_version + ".xlsx")
 
                 wb = Workbook(experiment_file_name)
 
-                for i in range(0, len(spectrum_expressions)):
-                    sheet.append(wb.add_worksheet(spectrum_expressions[i]))
+                for i in range(0, len(sbfl_metrics)):
+                    sheet.append(wb.add_worksheet(sbfl_metrics[i]))
                     write_header_in_result_file(row, sheet[i])
                 row += 1
                 num_of_bugs = 0
@@ -199,20 +193,20 @@ def multiple_bugs_ranking(result_folder, system_name, bug_folder, system_dir, kw
                     ranking_results, varcop_ranking_time = ranking_multiple_bugs(buggy_statements,
                                                                                  mutated_project_dir,
                                                                                  search_spaces,
-                                                                                 spectrum_expressions,
+                                                                                 sbfl_metrics,
                                                                                  aggregation_type,
                                                                                  normalization_type,
                                                                                  coverage_version,
                                                                                  filtering_coverage_rate, alpha)
                     fb_ranking_results = features_ranking_multiple_bugs(buggy_statements, mutated_project_dir,
                                                                         search_spaces,
-                                                                        filtering_coverage_rate, spectrum_expressions)
+                                                                        filtering_coverage_rate, sbfl_metrics)
 
-                    for metric in range(0, len(spectrum_expressions)):
+                    for metric in range(0, len(sbfl_metrics)):
                         sheet[metric].write(row_temp, BUG_ID_COL, mutated_project_name)
                         row = write_result_to_file(row_temp, sheet[metric],
-                                                   ranking_results[spectrum_expressions[metric]],
-                                                   fb_ranking_results[spectrum_expressions[metric]], search_spaces,
+                                                   ranking_results[sbfl_metrics[metric]],
+                                                   fb_ranking_results[sbfl_metrics[metric]], search_spaces,
                                                    is_a_var_bug)
                 wb.close()
 

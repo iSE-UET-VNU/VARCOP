@@ -9,7 +9,8 @@ import numpy
 
 from util.FileManager import join_path, \
     get_test_coverage_dir, get_variant_dir, \
-    get_variants_dir, get_all_variant_dirs, list_dir, get_spectrum_failed_coverage_file_name_with_version, get_spectrum_passed_coverage_file_name_with_version
+    get_variants_dir, get_all_variant_dirs, list_dir, get_spectrum_failed_coverage_file_name_with_version, \
+    get_spectrum_passed_coverage_file_name_with_version
 
 from ranking.Keywords import *
 # keywords
@@ -141,8 +142,8 @@ def sbfl(buggy_statements, mutated_project_dir, search_spaces, spectrum_expressi
                                                                       full_ranked_list[metric])
 
         all_buggy_positions[metric][SBFL_TC_RANK] = locate_multiple_bugs(buggy_statements, sliced_stms_set,
-                                                                         isolated_ranked_list[metric],
-                                                                         full_ranked_list[metric])
+                                                                        isolated_ranked_list[metric],
+                                                                        full_ranked_list[metric])
 
 
 def varcop(buggy_statements, local_scores, variant_level_suspiciousness, search_spaces,
@@ -176,7 +177,6 @@ def varcop(buggy_statements, local_scores, variant_level_suspiciousness, search_
                                                                        aggregation_type,
                                                                        normalized_type, alpha)
 
-
         all_buggy_positions[metric][VARCOP_RANK] = locate_multiple_bugs(buggy_statements,
                                                                         varcop_isolated_set,
                                                                         varcop_isolated_ranked_list,
@@ -192,18 +192,16 @@ def varcop(buggy_statements, local_scores, variant_level_suspiciousness, search_
                                                                        aggregation_type,
                                                                        normalized_type, alpha)
 
-
         all_buggy_positions[metric][VARCOP_TC_RANK] = locate_multiple_bugs(buggy_statements,
-                                                                           sliced_isolated_set,
-                                                                           sliced_isolated_ranked_list,
-                                                                           full_ranked_list)
+                                                                          sliced_isolated_set,
+                                                                          sliced_isolated_ranked_list,
+                                                                          full_ranked_list)
 
 
 def ranking_multiple_bugs(buggy_statements, mutated_project_dir, search_spaces, spectrum_expressions,
                           aggregation_type, normalized_type, spectrum_coverage_prefix="", coverage_rate=0.0, alpha=0):
     start_time = time.time()
-    global buggy
-    buggy = buggy_statements
+
     global all_buggy_positions
     all_buggy_positions = {}
 
@@ -239,7 +237,6 @@ def locate_multiple_bugs(buggy_statements, isolated_set, isolated_ranked_list,
         else:
             bugs[stm][EXAM] = bugs[stm][RANK] / len(isolated_ranked_list)
     return bugs
-
 
 
 def get_local_score(stm, ranked_list):

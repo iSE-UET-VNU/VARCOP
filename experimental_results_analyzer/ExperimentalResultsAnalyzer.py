@@ -13,10 +13,12 @@ from ranking.Spectrum_Expression import JACCARD, SORENSEN_DICE, TARANTULA, OCHIA
 
 from xlsxwriter import Workbook
 
-data_column = [VARCOP_RANK, VARCOP_EXAM, VARCOP_SPACE, VARCOP_TC_RANK, VARCOP_TC_EXAM, SBFL_TC_RANK, SBFL_TC_EXAM,
-               FB_TC_RANK, FB_TC_EXAM, TC_SPACE, VARCOP_DISABLE_BPC_RANK, VARCOP_DISABLE_BPC_EXAM,
-               SBFL_RANK, SBFL_EXAM, FB_RANK, FB_EXAM, SPACE]
-rank_column = [VARCOP_RANK, VARCOP_TC_RANK, SBFL_TC_RANK, FB_TC_RANK, VARCOP_DISABLE_BPC_RANK, SBFL_RANK, FB_RANK]
+default_data_column = [VARCOP_RANK, VARCOP_EXAM, VARCOP_SPACE, VARCOP_TC_RANK, VARCOP_TC_EXAM, SBFL_TC_RANK,
+                       SBFL_TC_EXAM,
+                       FB_TC_RANK, FB_TC_EXAM, TC_SPACE, VARCOP_DISABLE_BPC_RANK, VARCOP_DISABLE_BPC_EXAM,
+                       SBFL_RANK, SBFL_EXAM, FB_RANK, FB_EXAM, SPACE]
+default_rank_column = [VARCOP_RANK, VARCOP_TC_RANK, SBFL_TC_RANK, FB_TC_RANK, VARCOP_DISABLE_BPC_RANK, SBFL_RANK,
+                       FB_RANK]
 SBFL_METRIC_COL = 0
 NUM_CASES_COL = 1
 NUM_BUGS_COL = 2
@@ -41,30 +43,29 @@ SPECTRUM_EXPRESSIONS_LIST = [TARANTULA, OCHIAI, OP2, BARINEL, DSTAR,
 
 # SPECTRUM_EXPRESSIONS_LIST = [TARANTULA]
 
-def write_all_bugs_to_a_file(summary_file_dir, file_lists, num_of_bugs, base_path):
-    writer = pandas.ExcelWriter(summary_file_dir, engine='openpyxl')
+def write_all_bugs_to_a_file(all_bugs_file_dir, experimental_dirs):
+    writer = pandas.ExcelWriter(all_bugs_file_dir, engine='openpyxl')
 
     row = 0
     num_of_file = 0
-    for file in file_lists:
-        for b in num_of_bugs:
-            file_name = join_path(file, b + ".xlsx")
-            file_path = join_path(base_path, file_name)
-            if os.path.exists(file_path):
-                excel_data_df = pandas.read_excel(file_path, sheet_name=None)
-                num_of_file += 1
-                if num_of_file > 1:
-                    for spectrum_expression_type in SPECTRUM_EXPRESSIONS_LIST:
-                        excel_data_df[spectrum_expression_type].to_excel(writer, sheet_name=spectrum_expression_type,
-                                                                         startrow=row,
-                                                                         index=False, header=False)
-                    row += len(excel_data_df[TARANTULA])
-                else:
-                    for spectrum_expression_type in SPECTRUM_EXPRESSIONS_LIST:
-                        excel_data_df[spectrum_expression_type].to_excel(writer, sheet_name=spectrum_expression_type,
-                                                                         startrow=row,
-                                                                         index=False)
-                    row += len(excel_data_df[TARANTULA]) + 1
+    for file in experimental_dirs:
+
+        file_path = os.path.join(EXPERIMENT_RESULT_FOLDER, file)
+        if os.path.exists(file_path):
+            excel_data_df = pandas.read_excel(file_path, sheet_name=None)
+            num_of_file += 1
+            if num_of_file > 1:
+                for spectrum_expression_type in SPECTRUM_EXPRESSIONS_LIST:
+                    excel_data_df[spectrum_expression_type].to_excel(writer, sheet_name=spectrum_expression_type,
+                                                                     startrow=row,
+                                                                     index=False, header=False)
+                row += len(excel_data_df[TARANTULA])
+            else:
+                for spectrum_expression_type in SPECTRUM_EXPRESSIONS_LIST:
+                    excel_data_df[spectrum_expression_type].to_excel(writer, sheet_name=spectrum_expression_type,
+                                                                     startrow=row,
+                                                                     index=False)
+                row += len(excel_data_df[TARANTULA]) + 1
 
     writer.save()
 
@@ -72,6 +73,7 @@ def write_all_bugs_to_a_file(summary_file_dir, file_lists, num_of_bugs, base_pat
 def summary_hitx(hitx_file_dir, all_bugs_file_dir, hitn):
     wb = Workbook(hitx_file_dir)
     sheet = wb.add_worksheet("sheet1")
+    excel_data_df = pandas.read_excel(all_bugs_file_dir, sheet_name=None)
 
     row = 0
     for hit_index in range(1, hitn + 1):
@@ -82,11 +84,12 @@ def summary_hitx(hitx_file_dir, all_bugs_file_dir, hitn):
     for hit_index in range(1, hitn + 1):
         col = hit_index * 3 - 2
         sheet.write(row, col, HIT_VARCOP)
-        sheet.write(row, col + 1, HIT_TC_SBFL)
-        sheet.write(row, col + 2, HIT_SBFL)
-    row += 1
 
-    excel_data_df = pandas.read_excel(all_bugs_file_dir, sheet_name=None)
+        col += 1
+        sheet.write(row, col, HIT_TC_SBFL)
+        col += 1
+        sheet.write(row, col, HIT_SBFL)
+    row += 1
 
     for spectrum_expression_type in SPECTRUM_EXPRESSIONS_LIST:
         sheet.write(row, 0, spectrum_expression_type)
@@ -96,8 +99,9 @@ def summary_hitx(hitx_file_dir, all_bugs_file_dir, hitn):
             col += 1
             sheet.write(row, col, count_hit_x(excel_data_df[spectrum_expression_type][VARCOP_RANK], hit))
             col += 1
-            sheet.write(row, col,
-                        count_hit_x(excel_data_df[spectrum_expression_type][SBFL_TC_RANK], hit))
+            if SBFL_TC_RANK in excel_data_df[TARANTULA]:
+                sheet.write(row, col,
+                            count_hit_x(excel_data_df[spectrum_expression_type][SBFL_TC_RANK], hit))
             col += 1
             sheet.write(row, col,
                         count_hit_x(excel_data_df[spectrum_expression_type][SBFL_RANK], hit))
@@ -115,39 +119,33 @@ def count_hit_x(value_list, x):
     return count
 
 
-def summary_result(all_bugs_file, summary_file, prefix):
+def summary_result(all_bugs_file, summary_file):
     summary_file_dir = join_path(EXPERIMENT_RESULT_FOLDER,
                                  summary_file)
     wb = Workbook(summary_file_dir)
     sheet = wb.add_worksheet("sheet1")
-
+    excel_data_df = pandas.read_excel(all_bugs_file, sheet_name=None)
     row = 0
-    write_header_in_sumary_file(row, sheet)
+    header_column = []
+    for item in default_data_column:
+        if item in excel_data_df[TARANTULA]:
+            header_column.append(item)
+    write_header_in_sumary_file(row, sheet, header_column)
     row += 1
-    comparison_data = calculate_average_in_a_file(all_bugs_file, row, sheet)
+    comparison_data = calculate_average_in_a_file(excel_data_df, row, sheet, header_column)
 
     wb.close()
     return comparison_data
 
 
-def write_header_in_sumary_file(row, sheet):
+def write_header_in_sumary_file(row, sheet, header_column):
     sheet.write(row, SBFL_METRIC_COL, SBFL_METRIC)
     sheet.write(row, NUM_CASES_COL, NUM_CASES)
     sheet.write(row, NUM_BUGS_COL, NUM_BUGS)
     col = NUM_BUGS_COL + 1
-    for item in data_column:
+    for item in header_column:
         sheet.write(row, col, item)
         col += 1
-    # sheet.write(row, VARCOP_RANK_COL, VARCOP_RANK)
-    # sheet.write(row, VARCOP_EXAM_COL, VARCOP_EXAM)
-    # sheet.write(row, VARCOP_SPACE_COL, VARCOP_SPACE)
-    # sheet.write(row, VARCOP_DISABLE_BPC_RANK_COL, VARCOP_DISABLE_BPC_RANK)
-    # sheet.write(row, VARCOP_DISABLE_BPC_EXAM_COL, VARCOP_DISABLE_BPC_EXAM)
-    # sheet.write(row, SBFL_RANK_COL, SBFL_RANK)
-    # sheet.write(row, SBFL_EXAM_COL, SBFL_EXAM)
-    # sheet.write(row, FB_RANK_COL, FB_RANK)
-    # sheet.write(row, FB_EXAM_COL, FB_EXAM)
-    # sheet.write(row, SPACE_COL, SPACE)
 
 
 def num_of_element(data_list):
@@ -158,8 +156,7 @@ def num_of_element(data_list):
     return element_count
 
 
-def calculate_average_in_a_file(experimental_file_dir, row, sheet):
-    excel_data_df = pandas.read_excel(experimental_file_dir, sheet_name=None)
+def calculate_average_in_a_file(excel_data_df, row, sheet, header_column):
     comparison_data = init_comparison_data()
 
     for spectrum_expression_type in SPECTRUM_EXPRESSIONS_LIST:
@@ -171,10 +168,10 @@ def calculate_average_in_a_file(experimental_file_dir, row, sheet):
 
         sheet.write(row, SBFL_METRIC_COL, spectrum_expression_type)
 
-        average_value_list = average_best_rank_exam(excel_data_df, spectrum_expression_type)
+        average_value_list = average_best_rank_exam(excel_data_df, spectrum_expression_type, header_column)
         # average_value_list = percentage_of_cases_found_bugs(experimental_file_dir, spectrum_expression_type, 3)
         col = NUM_BUGS_COL + 1
-        for metric in data_column:
+        for metric in header_column:
             sheet.write(row, col, average_value_list[metric])
             col += 1
         row += 1
@@ -184,12 +181,18 @@ def calculate_average_in_a_file(experimental_file_dir, row, sheet):
     return comparison_data
 
 
-def summary_pbl(all_bugs_file, summary_file, prefix):
+def summary_pbl(all_bugs_file, summary_file, num_of_examed_stms):
     summary_file_dir = join_path(EXPERIMENT_RESULT_FOLDER,
                                  summary_file)
     wb = Workbook(summary_file_dir)
     sheets = []
-    num_sheet =0
+    num_sheet = 0
+    excel_data_df = pandas.read_excel(all_bugs_file, sheet_name=None)
+    rank_column = []
+    for item in default_rank_column:
+        if item in excel_data_df[TARANTULA]:
+            rank_column.append(item)
+
     for spectrum_expression_type in [TARANTULA, OP2, OCHIAI, BARINEL, DSTAR]:
         sheets.append(wb.add_worksheet(spectrum_expression_type))
         sheet = sheets[num_sheet]
@@ -202,24 +205,32 @@ def summary_pbl(all_bugs_file, summary_file, prefix):
             sheet.write(row, col, item)
             col += 1
         row += 1
-        for num_stm in range(1, 11):
+        for num_stm in range(1, num_of_examed_stms + 1):
             col = 0
             sheet.write(row, col, num_stm)
             col = +1
-            average_value_list = percentage_of_bugs_found_per_case(all_bugs_file, spectrum_expression_type, num_stm)
+            average_value_list = percentage_of_bugs_found_per_case(excel_data_df, rank_column, spectrum_expression_type,
+                                                                   num_stm)
             for metric in rank_column:
-                 sheet.write(row, col, average_value_list[metric])
-                 col += 1
+                sheet.write(row, col, average_value_list[metric])
+                col += 1
             row += 1
 
     wb.close()
 
-def summary_percentage_of_cases_found_bugs(all_bugs_file, summary_file, prefix):
+
+def summary_percentage_of_cases_found_bugs(all_bugs_file, summary_file, num_of_examed_stms):
     summary_file_dir = join_path(EXPERIMENT_RESULT_FOLDER,
                                  summary_file)
     wb = Workbook(summary_file_dir)
     sheets = []
-    num_sheet =0
+    num_sheet = 0
+    excel_data_df = pandas.read_excel(all_bugs_file, sheet_name=None)
+    rank_column = []
+    for item in default_rank_column:
+        if item in excel_data_df[TARANTULA]:
+            rank_column.append(item)
+
     for spectrum_expression_type in [TARANTULA, OP2, OCHIAI, BARINEL, DSTAR]:
         sheets.append(wb.add_worksheet(spectrum_expression_type))
         sheet = sheets[num_sheet]
@@ -232,11 +243,12 @@ def summary_percentage_of_cases_found_bugs(all_bugs_file, summary_file, prefix):
             sheet.write(row, col, item)
             col += 1
         row += 1
-        for num_stm in range(1, 11):
+        for num_stm in range(1, num_of_examed_stms + 1):
             col = 0
             sheet.write(row, col, num_stm)
             col = +1
-            average_value_list = percentage_of_cases_found_bugs(all_bugs_file, spectrum_expression_type, num_stm)
+            average_value_list = percentage_of_cases_found_bugs(excel_data_df, rank_column, spectrum_expression_type,
+                                                                num_stm)
 
             for metric in rank_column:
                 sheet.write(row, col, average_value_list[metric])
@@ -250,8 +262,7 @@ MAX = 100000
 MIN = -100000
 
 
-def percentage_of_bugs_found_per_case(experimental_file_dir, sbfl_metric, num_examined_stm):
-    excel_data_df = pandas.read_excel(experimental_file_dir, sheet_name=None)
+def percentage_of_bugs_found_per_case(excel_data_df, rank_column, sbfl_metric, num_examined_stm):
     index = 0
     percentage_list = {}
     for metric in rank_column:
@@ -271,8 +282,7 @@ def percentage_of_bugs_found_per_case(experimental_file_dir, sbfl_metric, num_ex
     return average_percentage_list
 
 
-def percentage_of_cases_found_bugs(experimental_file_dir, sbfl_metric, num_examined_stm):
-    excel_data_df = pandas.read_excel(experimental_file_dir, sheet_name=None)
+def percentage_of_cases_found_bugs(excel_data_df, rank_column, sbfl_metric, num_examined_stm):
     index = 0
     percentage_list = {}
     for metric in rank_column:
@@ -299,44 +309,44 @@ def calculate_average(data):
     return sum / len(data)
 
 
-def average_best_rank_exam(excel_data_df, sbfl_metric):
-    best_value_list = get_best_rank_exam(excel_data_df, sbfl_metric)
+def average_best_rank_exam(excel_data_df, sbfl_metric, header_column):
+    best_value_list = get_best_rank_exam(excel_data_df, sbfl_metric, header_column)
     average_value_list = {}
-    for metric in data_column:
+    for metric in header_column:
         average_value_list[metric] = calculate_average(best_value_list[metric])
     return average_value_list
 
 
-def average_worst_rank_exam(excel_data_df, sbfl_metric):
+def average_worst_rank_exam(excel_data_df, sbfl_metric, header_column):
     best_value_list = get_worst_rank_exam(excel_data_df, sbfl_metric)
     average_value_list = {}
-    for metric in data_column:
+    for metric in header_column:
         average_value_list[metric] = calculate_average(best_value_list[metric])
     return average_value_list
 
 
-def get_best_rank_exam(excel_data_df, sbfl_metric):
+def get_best_rank_exam(excel_data_df, sbfl_metric, header_column):
     index = 0
     best_value_list = {}
-    for metric in data_column:
+    for metric in header_column:
         best_value_list[metric] = []
 
     while index < len(excel_data_df[sbfl_metric][BUG_ID]):
-        data, index = get_values_of_a_case(excel_data_df, sbfl_metric, index, data_column)
-        for metric in data_column:
+        data, index = get_values_of_a_case(excel_data_df, sbfl_metric, index, header_column)
+        for metric in header_column:
             best_value_list[metric].append(min(data[metric]))
     return best_value_list
 
 
-def get_worst_rank_exam(excel_data_df, sbfl_metric):
+def get_worst_rank_exam(excel_data_df, sbfl_metric, header_column):
     index = 0
     best_value_list = {}
-    for metric in data_column:
+    for metric in header_column:
         best_value_list[metric] = []
 
     while index < len(excel_data_df[sbfl_metric][BUG_ID]):
-        data, index = get_values_of_a_case(excel_data_df, sbfl_metric, index, data_column)
-        for metric in data_column:
+        data, index = get_values_of_a_case(excel_data_df, sbfl_metric, index, header_column)
+        for metric in header_column:
             best_value_list[metric].append(max(data[metric]))
     return best_value_list
 
