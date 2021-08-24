@@ -49,7 +49,7 @@ def local_ranking_a_suspicious_list(mutated_project_dir, suspicious_stms_list, s
 def global_ranking_a_suspicious_list(all_stms_of_the_system, all_stms_in_failing_variants, suspicious_stms_list,
                                      local_suspiciousness_of_all_the_system, variant_level_suspiciousness,
                                      spectrum_expression, aggregation_type, normalized_type, alpha=0):
-    if normalized_type == NORMALIZATION_ALPHA_BETA:
+    if normalized_type == NORMALIZATION_ENABLE:
         normalized_score_list = normalize_local_score_alpha_beta(local_suspiciousness_of_all_the_system,
                                                                  all_stms_in_failing_variants,
                                                                  suspicious_stms_list)

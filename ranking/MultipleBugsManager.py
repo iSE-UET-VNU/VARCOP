@@ -66,7 +66,6 @@ def write_header_in_result_file(row, sheet):
     sheet.write(row, SPACE_COL, SPACE)
 
 
-
 def write_result_to_file(row, sheet, ranking_results, fb_results, search_spaces, is_var_bug):
     varcop_space = len(get_set_of_stms(search_spaces[SS_VARCOP]))
     sliced_space = len(get_set_of_stms(search_spaces[SS_SLICING]))
@@ -82,7 +81,6 @@ def write_result_to_file(row, sheet, ranking_results, fb_results, search_spaces,
         else:
             sheet.write(row, VARCOP_RANK_COL, ranking_results[VARCOP_DISABLE_BPC_RANK][stm][RANK])
             sheet.write(row, VARCOP_EXAM_COL, (ranking_results[VARCOP_DISABLE_BPC_RANK][stm][RANK] / all_stms) * 100)
-
 
         sheet.write(row, VARCOP_SPACE_COL, varcop_space)
 
@@ -131,12 +129,11 @@ def get_suspicious_space(mutated_project_dir, filtering_coverage_rate, coverage_
     return search_spaces
 
 
-def multiple_bugs_ranking(system_name, bug_folder, system_dir, kwise, sbfl_metrics,
-                          filtering_coverage_rate, coverage_version, alpha):
-    aggregations = [RankingManager.AGGREGATION_ARITHMETIC_MEAN]
-    normalizations = [RankingManager.NORMALIZATION_ALPHA_BETA]
-
-    mutated_projects_dir = join_path(system_dir, kwise)
+def multiple_bugs_ranking(system_name, num_bug_setting, bug_folder_dir, kwise, sbfl_metrics, alpha=0.5,
+                          normalization=NORMALIZATION_ENABLE,
+                          aggregation=AGGREGATION_ARITHMETIC_MEAN,
+                          filtering_coverage_rate=0.0, coverage_version=""):
+    mutated_projects_dir = join_path(bug_folder_dir, kwise)
     if os.path.exists(mutated_projects_dir):
         mutated_projects = list_dir(mutated_projects_dir)
 
@@ -148,67 +145,64 @@ def multiple_bugs_ranking(system_name, bug_folder, system_dir, kwise, sbfl_metri
         if not os.path.exists(system_result_dir):
             os.makedirs(system_result_dir)
 
-        for normalization_type in normalizations:
-            normalization_result_dir = join_path(system_result_dir, normalization_type)
-            if not os.path.exists(normalization_result_dir):
-                os.makedirs(normalization_result_dir)
+        normalization_result_dir = join_path(system_result_dir, normalization)
+        if not os.path.exists(normalization_result_dir):
+            os.makedirs(normalization_result_dir)
 
-            for aggregation_type in aggregations:
-                aggregation_result_dir = join_path(normalization_result_dir, aggregation_type)
-                if not os.path.exists(aggregation_result_dir):
-                    os.makedirs(aggregation_result_dir)
+        aggregation_result_dir = join_path(normalization_result_dir, aggregation)
+        if not os.path.exists(aggregation_result_dir):
+            os.makedirs(aggregation_result_dir)
 
-                kwise_result_dir = join_path(aggregation_result_dir, kwise)
-                if not os.path.exists(kwise_result_dir):
-                    os.makedirs(kwise_result_dir)
-                sheet = []
-                row = 0
-                experiment_file_name = join_path(kwise_result_dir,
-                                                 bug_folder + coverage_version + ".xlsx")
+        kwise_result_dir = join_path(aggregation_result_dir, kwise)
+        if not os.path.exists(kwise_result_dir):
+            os.makedirs(kwise_result_dir)
+        sheet = []
+        row = 0
+        experiment_file_name = join_path(kwise_result_dir,
+                                         num_bug_setting + coverage_version + ".xlsx")
 
-                wb = Workbook(experiment_file_name)
+        wb = Workbook(experiment_file_name)
 
-                for i in range(0, len(sbfl_metrics)):
-                    sheet.append(wb.add_worksheet(sbfl_metrics[i]))
-                    write_header_in_result_file(row, sheet[i])
-                row += 1
-                num_of_bugs = 0
+        for i in range(0, len(sbfl_metrics)):
+            sheet.append(wb.add_worksheet(sbfl_metrics[i]))
+            write_header_in_result_file(row, sheet[i])
+        row += 1
+        num_of_bugs = 0
 
-                for mutated_project_name in mutated_projects:
-                    print(mutated_project_name)
-                    num_of_bugs += 1
-                    mutated_project_dir = join_path(mutated_projects_dir, mutated_project_name)
+        for mutated_project_name in mutated_projects:
+            num_of_bugs += 1
+            mutated_project_dir = join_path(mutated_projects_dir, mutated_project_name)
 
-                    # suspicious_isolation(mutated_project_dir, filtering_coverage_rate, coverage_version)
-                    search_spaces = get_suspicious_space(mutated_project_dir, filtering_coverage_rate, coverage_version)
-                    buggy_statements = get_multiple_buggy_statements(mutated_project_name, mutated_project_dir)
+            # suspicious_isolation(mutated_project_dir, filtering_coverage_rate, coverage_version)
+            search_spaces = get_suspicious_space(mutated_project_dir, filtering_coverage_rate, coverage_version)
+            buggy_statements = get_multiple_buggy_statements(mutated_project_name, mutated_project_dir)
 
-                    row_temp = row
+            row_temp = row
 
-                    if system_name == "ZipMe":
-                        is_a_var_bug = is_var_bug_by_config(mutated_project_dir, ["Base", "Compress"])
-                    else:
-                        is_a_var_bug = is_var_bug_by_config(mutated_project_dir, ["Base"])
+            if system_name == "ZipMe":
+                is_a_var_bug = is_var_bug_by_config(mutated_project_dir, ["Base", "Compress"])
+            else:
+                is_a_var_bug = is_var_bug_by_config(mutated_project_dir, ["Base"])
 
-                    ranking_results, varcop_ranking_time = ranking_multiple_bugs(buggy_statements,
-                                                                                 mutated_project_dir,
-                                                                                 search_spaces,
-                                                                                 sbfl_metrics,
-                                                                                 aggregation_type,
-                                                                                 normalization_type,
-                                                                                 coverage_version,
-                                                                                 filtering_coverage_rate, alpha)
-                    fb_ranking_results = features_ranking_multiple_bugs(buggy_statements, mutated_project_dir,
-                                                                        search_spaces,
-                                                                        filtering_coverage_rate, sbfl_metrics)
+            ranking_results, varcop_ranking_time = ranking_multiple_bugs(buggy_statements,
+                                                                         mutated_project_dir,
+                                                                         search_spaces,
+                                                                         sbfl_metrics,
+                                                                         aggregation,
+                                                                         normalization,
+                                                                         coverage_version,
+                                                                         filtering_coverage_rate, alpha)
+            fb_ranking_results = features_ranking_multiple_bugs(buggy_statements, mutated_project_dir,
+                                                                search_spaces,
+                                                                filtering_coverage_rate, sbfl_metrics)
 
-                    for metric in range(0, len(sbfl_metrics)):
-                        sheet[metric].write(row_temp, BUG_ID_COL, mutated_project_name)
-                        row = write_result_to_file(row_temp, sheet[metric],
-                                                   ranking_results[sbfl_metrics[metric]],
-                                                   fb_ranking_results[sbfl_metrics[metric]], search_spaces,
-                                                   is_a_var_bug)
-                wb.close()
+            for metric in range(0, len(sbfl_metrics)):
+                sheet[metric].write(row_temp, BUG_ID_COL, mutated_project_name)
+                row = write_result_to_file(row_temp, sheet[metric],
+                                           ranking_results[sbfl_metrics[metric]],
+                                           fb_ranking_results[sbfl_metrics[metric]], search_spaces,
+                                           is_a_var_bug)
+        wb.close()
 
 
 def write_runtime_to_file(system_result_dir, run_time, file_name):
